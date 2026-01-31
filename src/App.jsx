@@ -11,8 +11,7 @@ function App() {
   const onClick = () =>{
     alert("Button clicked!");
   }
-  
-
+    
   return (
     <BrowserRouter>
       <Routes>

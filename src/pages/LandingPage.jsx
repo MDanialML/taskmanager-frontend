@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import { useState } from "react";
+import authService from "../services/authservice";
 
 function LandingPage(){
     const navigate = useNavigate();
@@ -13,14 +14,38 @@ function LandingPage(){
         password: ''
     });
 
-    const handleSubmit = (e) => {
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log('Form Data', formData)
+        setError('');
+        //form validation
+        if(!formData.username || !formData.password){
+            setError("Please fill the fields");
+            return
+        }
+
+        try{
+            setLoading(true);
+            const response = await authService.login(formData);
+            console.log('Login successful: ', response);
+
+            navigate('/dashboard');
+
+        }catch(err){
+            console.error('Login error:', err);
+            setError(err.message || 'Login failed. Please check your credentials.');
+        }finally{
+            setLoading(false);
+        }
     }
 
     const handleChange = (e) =>{
         const {name, value} = e.target;
-        setFormData((prev) => ({...prev, [name]:value}));
+        setFormData((prev) => ({
+            ...prev,
+            [name]:value}));
     }
 
     return(
@@ -33,6 +58,12 @@ function LandingPage(){
             <div className="flex justify-center items-center min-h-[500px]">
             <Card className="max-w-md w-full">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Login to manage your tasks</h2>
+            {/* Error message */}
+                    {error && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                            {error}
+                        </div>
+                    )}
             <form onSubmit={handleSubmit}>
             <div className="space-y-4">
                 {/**Username Field */}
@@ -63,8 +94,8 @@ function LandingPage(){
                     />
                 </div>
                  {/* Buttons */}
-            <Button type="submit" variant="primary" className="w-full">
-              Login
+            <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
             <Button onClick = {handleNavigateClick} type="button" variant="secondary" className="w-full">
               Register
