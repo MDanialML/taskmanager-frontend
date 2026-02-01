@@ -11,7 +11,7 @@ const authService = {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify({
                     id: response.data.id,
-                    name: response.data.name,
+                    name: response.data.username,
                     password: response.data.password
                 }));
             }
@@ -26,14 +26,16 @@ const authService = {
     login: async (credentials) => {
         try {
             const response = await api.post('/login', credentials);
+
+            console.log('Full login response:', response.data);
+
             
             // Store user data and token
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('user', JSON.stringify({
-                    id: response.data.id,
-                    name: response.data.name,
-                    password: response.data.password
+                    id:response.data.id,
+                    name:response.data.username,
                 }));
             }
             
@@ -62,7 +64,7 @@ const authService = {
 
     // Check if user is logged in
     isAuthenticated: () => {
-        return !localStorage.getItem('token');
+        return !!localStorage.getItem('token');
     }
 };
 
