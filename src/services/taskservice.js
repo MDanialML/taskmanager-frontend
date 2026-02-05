@@ -16,7 +16,7 @@ const taskService = {
     //Get all tasks for logged-in user
     getTasks: async () => {
         try{
-            const response = await api.get('/api/tasks');
+            const response = await api.get('/tasks');
             return response.data;
         }catch (error){
             throw error.response?.data || error.message;
@@ -26,7 +26,7 @@ const taskService = {
     //Get single task by ID
     getTaskById: async(id) => {
         try{
-            const response = await api.get(`/api/tasks/${id}`);
+            const response = await api.get(`/tasks/${id}`);
             return response.data;
         }catch (error){
             throw error.response?.data || error.message;
@@ -36,7 +36,7 @@ const taskService = {
     //Create new task
     CreatedTask: async (taskData) => {
         try{
-            const response = await api.post(`/api/tasks`, taskData);
+            const response = await api.post(`/tasks`, taskData);
             return response.data;
         }catch(error) {
             throw error.response?.data || error.message;
@@ -45,7 +45,7 @@ const taskService = {
     //Update existing task
     updateTask: async (id, taskData) =>{
         try{
-            const response = await api.put(`/api/tasks/${id}`, taskData);
+            const response = await api.put(`/tasks/${id}`, taskData);
             return response.data;
         }catch (error){
             throw error.response?.data || error.message;
@@ -58,7 +58,7 @@ const taskService = {
                 ...currentTask,
                 completed: !currentTask.completed
             };
-            const response = await api.put(`/api/tasks/${id}`, updatedTask);
+            const response = await api.put(`/tasks/${id}`, updatedTask);
             return response.data;
         }catch (error){
             throw error.response?.data || error.message;

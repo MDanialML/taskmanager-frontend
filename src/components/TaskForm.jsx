@@ -1,8 +1,8 @@
 function TaskForm(){
     return(
-        <>
-        <h1>Here is TaskForm!</h1>
-        </>
+        <div className="flex justify-center ">
+
+        </div>
     );
 }
 export default TaskForm
