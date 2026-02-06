@@ -63,6 +63,13 @@ const taskService = {
         }catch (error){
             throw error.response?.data || error.message;
         }
+    },
+    deleteTask: async (taskId) => {
+        try{
+            const response = await api.delete(`/tasks/${taskId}`, taskId);
+        }catch(err){
+            console.error(err.message);
+        }
     }
 };
 

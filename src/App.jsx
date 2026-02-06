@@ -8,9 +8,7 @@ import RegisterPage from './pages/RegisterPage'
 import UpdateTaskPage from './pages/UpdateTaskPage'
 
 function App() {
-  const onClick = () =>{
-    alert("Button clicked!");
-  }
+ 
     
   return (
     <BrowserRouter>

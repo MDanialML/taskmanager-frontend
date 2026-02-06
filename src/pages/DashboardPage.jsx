@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import taskservice from '../services/taskservice'
+import TaskCard from "../components/TaskCard";
 import { useNavigate } from "react-router-dom";
 
 function DashboardPage(){
@@ -8,6 +9,7 @@ function DashboardPage(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
 
     //handle add task click
     const handleAddTask = () => {
@@ -30,6 +32,29 @@ function DashboardPage(){
             setError('Failed to load tasks');
         }finally{
             setLoading(false);
+        }
+    };
+
+    //funtionality for add task
+     const handleDelete = async (taskId) => {
+        try {
+            await taskservice.deleteTask(taskId);
+            // Refresh tasks after delete
+            fetchTasks();
+        } catch (err) {
+            console.error('Error deleting task:', err);
+            alert('Failed to delete task');
+        }
+    };
+
+    const handleToggle = async (taskId, currentTask) => {
+        try {
+            await taskservice.toggleTaskStatus(taskId, currentTask);
+            // Refresh tasks after toggle
+            fetchTasks();
+        } catch (err) {
+            console.error('Error toggling task:', err);
+            alert('Failed to update task status');
         }
     };
 
@@ -63,13 +88,12 @@ function DashboardPage(){
                 ):(
                     <div className="space-y-3">
                         {incompleteTasks.map(task => (
-                            <div key={task.id} className="p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-                                <h4 className="font-semibold">{task.title}</h4>
-                                <p className="text-sm text-gray-600">{task.description}</p>
-                                <p className="text-xs text-gray-400 mt-2">
-                                    Created: {new Date(task.createdAt).toLocaleDateString()}
-                                </p>
-                            </div>
+                             <TaskCard
+                                    key={task.id}
+                                    task={task}
+                                    onDelete={handleDelete}
+                                    onToggle={handleToggle}
+                                />
                         ))}
                     </div>
                 )
@@ -87,13 +111,12 @@ function DashboardPage(){
             ):(
                  <div className="space-y-3">
                     {completedTasks.map(task => (
-                        <div key={task.id} className="p-3 bg-green-50 border-l-4 border-green-500 rounded">
-                            <h4 className="font-semibold">{task.title}</h4>
-                            <p className="text-sm text-gray-600">{task.description}</p>
-                            <p className="text-xs text-gray-400 mt-2">
-                                Completed: {new Date(task.updatedAt).toLocaleDateString()}
-                            </p>
-                        </div>
+                        <TaskCard
+                                    key={task.id}
+                                    task={task}
+                                    onDelete={handleDelete}
+                                    onToggle={handleToggle}
+                                />
                     ))}
                 </div>
             )}
