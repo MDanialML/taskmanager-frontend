@@ -64,12 +64,13 @@ const taskService = {
             throw error.response?.data || error.message;
         }
     },
-    deleteTask: async (taskId) => {
-        try{
-            const response = await api.delete(`/tasks/${taskId}`, taskId);
-        }catch(err){
-            console.error(err.message);
-        }
+    deleteTask: async (id) => {
+        try {
+        const response = await api.delete(`/tasks/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
     }
 };
 
